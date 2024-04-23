@@ -1,0 +1,13 @@
+%TOKEN Int   "[1-9][0-9]*"
+%TOKEN Add   "[+]"
+%TOKEN EOF   "$"
+%TOKEN WS    "[\n\t ]+"
+%IGNORE WS
+%START intAdd
+
+intAdd     -> Int intAddTail EOF  { ['+', $1] + $2 }
+              ;
+intAddTail -> Add Int intAddTail  { [$2] + $3 }
+              | EPSILON           { [] }
+              ;
+

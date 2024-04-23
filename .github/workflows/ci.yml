@@ -1,0 +1,62 @@
+name: Autograding Excercise 3
+
+on:
+  push:
+    paths:
+      - "ex3/**/*.py"
+      - "ex3/**/*.ll1"
+  workflow_dispatch:
+
+permissions:
+  checks: write
+  actions: read
+  contents: read
+
+jobs:
+  autograding-ex3:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Eps
+        id: eps
+        uses: education/autograding-command-grader@v1
+        with:
+          test-name: Eps
+          command: cd ex3 && python3 -m unittest test.test_parser_analysis.TestLL1Analysis.test_eps -v
+          timeout: 1
+          max-score: 3
+      - name: First
+        id: first
+        uses: education/autograding-command-grader@v1
+        with:
+          test-name: First
+          command: cd ex3 && python3 -m unittest test.test_parser_analysis.TestLL1Analysis.test_first -v
+          timeout: 1
+          max-score: 3
+      - name: Follow
+        id: follow
+        uses: education/autograding-command-grader@v1
+        with:
+          test-name: Follow
+          command: cd ex3 && python3 -m unittest test.test_parser_analysis.TestLL1Analysis.test_follow -v
+          timeout: 1
+          max-score: 3
+      - name: Predict
+        id: predict
+        uses: education/autograding-command-grader@v1
+        with:
+          test-name: Predict
+          command: cd ex3 && python3 -m unittest test.test_parser_analysis.TestLL1Analysis.test_predict -v
+          timeout: 1
+          max-score: 1
+      - name: Autograding Reporter
+        uses: education/autograding-grading-reporter@v1
+        env:
+          EPS_RESULTS: "${{steps.eps.outputs.result}}"
+          FIRST_RESULTS: "${{steps.first.outputs.result}}"
+          FOLLOW_RESULTS: "${{steps.follow.outputs.result}}"
+          PREDICT_RESULTS: "${{steps.predict.outputs.result}}"
+        with:
+          runners: eps, first, follow, predict

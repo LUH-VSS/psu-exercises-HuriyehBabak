@@ -1,0 +1,126 @@
+
+
+%TOKEN EOF   "$"
+%TOKEN WS    "[\n\t ]+"
+%IGNORE WS
+
+%TOKEN VAR    "var"
+%TOKEN FUNC   "func"
+%TOKEN IF     "if"
+%TOKEN ELSE   "else"
+%TOKEN WHILE  "while"
+%TOKEN RETURN "return"
+%TOKEN LPAR      "\\("
+%TOKEN RPAR      "\\)"
+%TOKEN LBRACE    "{"
+%TOKEN RBRACE    "}"
+%TOKEN ASSIGN    ":="
+%TOKEN COLON     ":"
+%TOKEN SEMICOLON ";"
+%TOKEN COMMA     ","
+%TOKEN ET        "&"
+
+%TOKEN NOT       "!"
+%TOKEN LE        "<="
+%TOKEN EQ        "=="
+%TOKEN GE        ">="
+
+
+%TOKEN INT    "int"
+
+%TOKEN IDENT   "[a-zA-Z_][a-zA-Z0-9_]*"
+%TOKEN LITERAL "[0-9]+"
+
+%TOKEN ADD   "[+]"
+%TOKEN SUB   "-"
+%TOKEN MUL   "[*]"
+%TOKEN DIV   "/"
+
+%IMPORT T "AST.types"
+%START program
+
+################################################################
+# Types
+type -> INT      { T.TypeInt() }
+      | ET type  { T.TypePointer($2) }
+      ;
+
+
+################################################################
+# Declarations
+program     -> decl_list EOF { T.TranslationUnitDecl(decls=$1) };
+
+identifier  -> IDENT   { T.Identifier($1.load) };
+literal     -> LITERAL { T.Literal(int($1.load)) };
+
+decl_list -> func_decl decl_list { [$1] + $2 }
+          |  EPSILON { [] }
+          ;
+
+func_decl -> FUNC identifier LPAR param_list RPAR COLON type block      { T.FuncDecl(name=$2.name, type=$7, params=$4, statements=$8.statements) };
+
+param_list -> param param_list_tail { [$1] + $2 }
+            | EPSILON               { [] };
+param_list_tail -> COMMA param param_list_tail { [$2] + $3 }
+                | EPSILON                      { [] };
+
+param -> identifier COLON type { T.VarDecl(name=$1.name, type=$3) };
+
+
+################################################################
+# Statements
+
+block -> LBRACE stmt_list RBRACE { T.CodeBlock($2) } ;
+
+stmt_list -> stmt stmt_list   { [$1] + $2 }
+           | EPSILON          { [] }
+           ;
+
+stmt -> var_decl                   { $1 }
+      | expr        SEMICOLON      { $1 }
+      | RETURN expr SEMICOLON      { T.ReturnStmt(expr=$2) }
+      | WHILE LPAR expr RPAR block { T.WhileStmt(cond=$3, body=$5) }
+      | IF    LPAR expr RPAR block if_tail
+                                   { T.IfStmt(cond=$3, then_block=$5, else_block=$6) }
+      ;
+
+if_tail -> EPSILON { None }
+         | ELSE block { $2 } ;
+
+var_decl  -> VAR  identifier                      COLON type SEMICOLON  { T.VarDecl(name=$2.name, type=$4) };
+################################################################
+# Expressions
+
+expr -> term expr_tail            { $2($1) };
+expr_tail -> EPSILON              { lambda x: x }
+           | ADD term expr_tail   { lambda x: $3(T.Add(lhs=x, rhs=$2)) }
+           | SUB term expr_tail   { lambda x: $3(T.Sub(lhs=x, rhs=$2)) }
+           | ASSIGN expr          { lambda x: T.Assign(lhs=x, rhs=$2) }
+           | bool_expr_tail       { $1 };
+
+
+
+term -> factor term_tail          { $2($1) };
+term_tail -> MUL factor term_tail { lambda x: $3(T.Mul(lhs=x, rhs=$2)) }
+           | DIV factor term_tail { lambda x: $3(T.Div(lhs=x, rhs=$2)) }
+           | EPSILON              { lambda x: x };
+
+factor -> literal
+        | identifier factor_tail  { $2($1) }
+        | NOT factor              { T.Not($2) }
+        | SUB factor              { T.Neg($2) }
+        | MUL factor              { T.Deref($2) }
+        | ET  factor              { T.Ref($2) }
+        | LPAR expr RPAR          { $2 };
+factor_tail -> LPAR arg_list RPAR { lambda x: T.CallExpr(callee=x, arguments=$2) }
+            |  EPSILON            { lambda x: x};
+
+bool_expr_tail -> LE expr              { lambda x: T.LessEqual(lhs=x, rhs=$2) }
+               |  GE expr              { lambda x: T.LessEqual(lhs=$2, rhs=x) }
+               |  EQ expr              { lambda x: T.Mul(T.LessEqual(lhs=x, rhs=$2), T.LessEqual(lhs=$2, rhs=x)) };
+
+arg_list -> expr arg_list_tail {[$1] + $2}
+          | EPSILON { [] };
+
+arg_list_tail -> COMMA expr arg_list_tail { [$2] + $3 }
+               | EPSILON { [] };

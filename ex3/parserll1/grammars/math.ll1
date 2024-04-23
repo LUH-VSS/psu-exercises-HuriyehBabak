@@ -1,0 +1,18 @@
+%TOKEN Int   "[1-9][0-9]*"
+%TOKEN add   "[+]"
+%TOKEN sub   "[-]"
+%TOKEN mul   "[*]"
+%TOKEN div   "[/]"
+%TOKEN EOF   "$"
+%TOKEN WS    "[\n\t ]+"
+%IGNORE WS
+%START math
+
+math     -> mathHead Int EOF { };
+
+mathHead -> add Int mathHead { }
+          | sub Int mathHead { }
+          | mul Int mathHead { }
+          | div Int mathHead { }
+          | EPSILON          { }
+          ;
