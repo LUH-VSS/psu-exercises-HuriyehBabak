@@ -2,9 +2,10 @@ Feedback
 
 1.
 
-Achieved Points: 14/15
+Achieved Points: 15/15
 
 Notes:
+- Nachkorrektur: 4) ist so richtig, da S->eps mit drin ist.
 
 
 PINs: 1690,6726,1720
