@@ -1,0 +1,16 @@
+Feedback
+
+1: 4/4
+2.eps : 3/3
+2.first: 3/3
+2.follow: 3/3
+2.predict: 1/1
+
+Achieved Points: 14/14
+
+Notes:
+
+
+PINs: 1690,6726,1720
+
+clone time: 2024-05-02 14:13:48.835694
