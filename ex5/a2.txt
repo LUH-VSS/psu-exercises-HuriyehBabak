@@ -1,0 +1,28 @@
+Namensraum -> Namen
+(a)
+A -> B
+A -> F
+A -> G
+A -> I
+C -> D
+J -> K
+B -> C
+I -> J
+
+E refs D
+H refs F
+L refs K
+
+(b)
+B -> C
+A -> B
+A -> E
+
+D refs C
+
+(c)
+A -> B
+A -> D
+D -> E
+
+C refs ???, key does not exist in tree above -> AST not valid
