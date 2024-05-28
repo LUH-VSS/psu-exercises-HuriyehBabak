@@ -9,6 +9,8 @@ J -> K
 B -> C
 I -> J
 
+(G -> ) leerer Namensraum, aber nicht so wichtig.
+
 E refs D
 H refs F
 L refs K
@@ -25,4 +27,9 @@ A -> B
 A -> D
 D -> E
 
+(B -> ) leerer Namensraum
+
 C refs ???, key does not exist in tree above -> AST not valid
+
+exactly AST is not valid? Now how can you fix it? -0.5P.
+(e.g. put declaration in parent scope so reference can access it.)
