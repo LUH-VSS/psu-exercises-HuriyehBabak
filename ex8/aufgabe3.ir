@@ -1,0 +1,15 @@
+// fn func(a: int, b: int, c: int): int
+
+IfGoto a, .BB1, .BB4
+
+.BB1:
+    IfGoto b, .BB2, .BB4
+
+.BB2:
+    IfGoto c, .BB3, .BB4
+
+.BB3:
+    Return 1
+
+.BB4:
+    Return 0
