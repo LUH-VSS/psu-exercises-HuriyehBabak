@@ -1,0 +1,16 @@
+Feedback
+
+factorial: 2/2
+prepend: 2/2
+last: 2/2
+concat: 3/3
+traverse: 3/3
+
+Achieved Points: 12/12
+
+Notes:
+
+
+PINs: 1690,6726,1720
+
+clone time: 2024-06-07 23:06:12.873147
