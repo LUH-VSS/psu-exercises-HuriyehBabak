@@ -1,0 +1,17 @@
+func xchg(ptr : &int) : int {
+     var ret : int;
+     var add : int;
+     add := 1;
+     ret := *ptr;
+     *ptr := 23;
+     return ret + add;
+}
+
+func main() : int {
+     var a : int;
+     var b : int;
+     a := 23;
+     b := 41;
+     a := xchg(&b);
+     return a;
+}

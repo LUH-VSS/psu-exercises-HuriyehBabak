@@ -1,0 +1,11 @@
+func main(): int {
+    var a : int;
+    var ret : int;
+    a := 5;
+    var ptr: &int;
+    ptr := &a;
+    a := 4;
+    ret := *ptr;
+    *ptr := 6;
+    return a + ret;
+}

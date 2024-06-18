@@ -1,0 +1,160 @@
+{
+  "configurations": [
+    {
+      "name": "All tests",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "unittest",
+      "args": ["-v"]
+    },
+    {
+      "name": "test_fastcall_remember_register",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "unittest",
+      "args": [
+        "-v",
+        "test.test_backend.TestBackend.test_fastcall_remember_register"
+      ]
+    },
+    {
+      "name": "test_fastcall_remember_stack",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "unittest",
+      "args": [
+        "-v",
+        "test.test_backend.TestBackend.test_fastcall_remember_stack"
+      ]
+    },
+    {
+      "name": "test_fastcall_spilling_register",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "unittest",
+      "args": [
+        "-v",
+        "test.test_backend.TestBackend.test_fastcall_spilling_register"
+      ]
+    },
+    {
+      "name": "test_fastcall_spilling_stack",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "unittest",
+      "args": [
+        "-v",
+        "test.test_backend.TestBackend.test_fastcall_spilling_stack"
+      ]
+    },
+    {
+      "name": "test_fib_remember_register",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "unittest",
+      "args": ["-v", "test.test_backend.TestBackend.test_fib_remember_register"]
+    },
+    {
+      "name": "test_fib_remember_stack",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "unittest",
+      "args": ["-v", "test.test_backend.TestBackend.test_fib_remember_stack"]
+    },
+    {
+      "name": "test_fib_spilling_register",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "unittest",
+      "args": ["-v", "test.test_backend.TestBackend.test_fib_spilling_register"]
+    },
+    {
+      "name": "test_fib_spilling_stack",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "unittest",
+      "args": ["-v", "test.test_backend.TestBackend.test_fib_spilling_stack"]
+    },
+    {
+      "name": "test_multiarg_remember_register",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "unittest",
+      "args": [
+        "-v",
+        "test.test_backend.TestBackend.test_multiarg_remember_register"
+      ]
+    },
+    {
+      "name": "test_multiarg_remember_stack",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "unittest",
+      "args": [
+        "-v",
+        "test.test_backend.TestBackend.test_multiarg_remember_stack"
+      ]
+    },
+    {
+      "name": "test_multiarg_spilling_register",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "unittest",
+      "args": [
+        "-v",
+        "test.test_backend.TestBackend.test_multiarg_spilling_register"
+      ]
+    },
+    {
+      "name": "test_multiarg_spilling_stack",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "unittest",
+      "args": [
+        "-v",
+        "test.test_backend.TestBackend.test_multiarg_spilling_stack"
+      ]
+    },
+    {
+      "name": "test_xchg_remember_register",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "unittest",
+      "args": [
+        "-v",
+        "test.test_backend.TestBackend.test_xchg_remember_register"
+      ]
+    },
+    {
+      "name": "test_xchg_remember_stack",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "unittest",
+      "args": ["-v", "test.test_backend.TestBackend.test_xchg_remember_stack"]
+    },
+    {
+      "name": "test_xchg_spilling",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "unittest",
+      "args": ["-v", "test.test_backend.TestBackend.test_xchg_spilling"]
+    },
+    {
+      "name": "test_xchg_spilling_register",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "unittest",
+      "args": [
+        "-v",
+        "test.test_backend.TestBackend.test_xchg_spilling_register"
+      ]
+    },
+    {
+      "name": "test_xchg_spilling_stack",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "unittest",
+      "args": ["-v", "test.test_backend.TestBackend.test_xchg_spilling_stack"]
+    }
+  ]
+}

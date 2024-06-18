@@ -1,0 +1,31 @@
+func fib(n : int) : int {
+    if (n == 0) {
+       return 0;
+    }
+    if (n == 1) {
+       return 1;
+    }
+    return fib(n-1) + fib(n-2);
+}
+
+func fib_iter(n : int) : int {
+    var a : int;
+    var b : int;
+    a := 0;
+    b := 1;
+    while (n - 1 >= 0) {
+       var tmp : int;
+       tmp := a;
+       a := a + b;
+       b := tmp;
+       n := n - 1;
+    }
+   return a;
+}
+
+
+func main() : int {
+    var ret : int;
+    // This Program must always return 2*fib(10) for testcases to work
+    return fib(10) + fib_iter(10);
+}

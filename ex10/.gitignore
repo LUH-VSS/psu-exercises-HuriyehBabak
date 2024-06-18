@@ -1,0 +1,10 @@
+.idea
+.code
+.vs
+__pycache__
+.DS_Store
+.mypy_cache
+.ruff_cache
+
+!.vscode/launch.json
+.vscode/settings.json

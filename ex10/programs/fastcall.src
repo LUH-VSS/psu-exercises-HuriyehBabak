@@ -1,0 +1,12 @@
+func constant() : int {
+    return 50;
+}
+
+
+func identity(a : int) : int {
+    return a;
+}
+
+func main() : int {
+    return identity(50) + constant();
+}
