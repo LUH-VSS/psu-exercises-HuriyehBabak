@@ -421,7 +421,14 @@ class RememberingRegisterAllocator(SpillingRegisterAllocator):
         super().before_Function(function)
 
         self.var_referenced: set[Variable] = set()
-        # TODO: Find all variables that are used in Reference
+        # Durchläuft alle Basic Blocks in der Funktion
+        for basic_block in func.basic_blocks:
+            # Durchläuft alle Anweisungen im Basic Block
+            for instruction in basic_block.instructions:
+                # Überprüft, ob die Anweisung eine Referenz auf ein Variable-Objekt ist
+                if type(instruction) == Reference and type(instruction.obj) == Variable:
+                    # Fügt die referenzierte Variable dem Set hinzu
+                    self.referenced_variables.add(instruction.obj)
 
         self.reset_state()
 
@@ -432,14 +439,43 @@ class RememberingRegisterAllocator(SpillingRegisterAllocator):
         self.dump_state()
         self.reg_free: dict[Register, bool] = {reg: True for reg in self.backend.registers}
 
-        # TODO: Handle end of basic block   (Goto+IfGoto)
-        # TODO: Handle call   instructions  (Call)
-        # TODO: Handle store  instructions  (Store)
-        # TODO: Handle load   instructions  (Load)
+        # Behandelt das Ende eines Basic Blocks (Goto oder IfGoto)
+        if type(instruction) in (Goto, IfGoto):
+            for (reg, value) in self.reg_values.items():
+                # Überprüft, ob das Register verändert wurde
+                if self.reg_dirty[reg]:
+                    # Speichert den aktuellen Wert des Registers im Speicher
+                    self._spill_register(reg)
+                    self._kill_register(reg)
+        # Behandelt Aufrufanweisungen (Call)
+        elif type(instruction) == Call:
+            for (reg, value) in self.reg_values.items():
+                if self.reg_dirty[reg]:
+                    self._spill_register(reg)
+                     # Register, die für Argumente verwendet werden, werden später gelöscht
+                    if value not in instruction.arguments:
+                        self._kill_register(reg)
+        # Behandelt Speicheranweisungen (Store) und Ladeanweisungen (Load)
+        elif type(instruction) in (Store, Load):
+            # Invalidiert alle referenzierten Variablen
+            for (reg, value) in self.reg_values.items():
+                # Überspringt Variablen, die nicht referenziert sind
+                if not value in self.var_referenced:
+                    continue
+
+                if self.reg_dirty[reg]:
+                    self._spill_register(reg)
+                self._kill_register(reg)
 
     def after_Instruction(self, instr):
         self.dump_state()
-
+        # Behandelt Aufrufanweisungen (Call)
+        if type(instruction) == Call:
+            for reg, value in self.register_values.items():
+                # Überprüft, ob das Register ein Argument ist
+                if value in instruction.arguments:
+                    # Leert das Register, da das Argument nicht mehr gebraucht wird
+                    self._kill_register(reg)
     ################################################################
     # Register-Allocation Code
     def reset_state(self):
