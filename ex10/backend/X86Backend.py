@@ -295,24 +295,52 @@ class RegisterCallingConvention(StackCallingConvention):
         if len(function.parameters) > len(self.backend.registers):
             return super().function_entry(function)
 
-        # TODO: Slots für Variablen UND Parameter
-        # TODO: Parameter mit Slots assoziieren
+        # Berechne die Anzahl der benötigten Slots im Speicherrahmen
+        total_slots = len(function.variables) + len(function.parameters)
+        stack_size = total_slots * 4
+
+        # Emitiere die Instruktion, um den Stack-Rahmen einzurichten
+        self.backend.emit_instr('enter', '$' + str(stack_size), '$0')
+
+        # Assoziiere die Parameter mit den Registern und weise ihnen EBP-Offsets zu
+        for index, parameter in enumerate(function.parameters):
+            # Setze den Offset des Parameters relativ zum EBP
+            parameter.ebp_offset = -4 * (index + 1)
+            # Schreibe den Parameter in das entsprechende Register
+            self.RA.write(self.backend.registers[index], parameter)
+
+        # Assoziiere die lokalen Variablen mit den Slots und weise ihnen EBP-Offsets zu
+        for index, variable in enumerate(function.variables):
+            # Berechne den Offset für die Variable
+            variable.ebp_offset = -4 * (len(function.parameters) + index + 1)
+
+        # Dumpen des Zustands des Register-Allokators für Debugging-Zwecke
         self.RA.dump_state()
 
     def call_prologue(self, instr: Call):
         if len(instr.arguments) > len(self.backend.registers):
             return super().call_prologue(instr)
 
-        # TODO: Argumente in Register laden
-        raise NotImplementedError("Register Calling Convention not implemeted")
+        # Lade die Argumente in die Register
+        for index, arg in enumerate(instruction.args):
+            # Lade das Argument in ein temporäres Register
+            temp_reg = self.RA.load(arg)
+            # Weise das Zielregister im Backend zu
+            target_reg = self.backend.registers[index]
+            self.RA.alloc_register(target_reg)
+            # Emitiere die Instruktion, um das Argument in das Zielregister zu verschieben
+            self.backend.emit_instr("mov", temp_reg, target_reg)
 
     def call_epilogue(self, instr: Call):
         if len(instr.arguments) > len(self.backend.registers):
             return super().call_epilogue(instr)
 
-        # TODO: Ein Call zerstört den Zustand
-        # TODO: Rückgabewert in Register schreiben
-        raise NotImplementedError("Register Calling Convention not implemeted")
+        self.RA.reset_state()
+
+        # Den Rückgabewert in das Zielregister schreiben
+        return_register = "%eax"
+        destination = instr.dst
+        self.RA.write(return_register, destination)
         self.RA.dump_state()
 
 
