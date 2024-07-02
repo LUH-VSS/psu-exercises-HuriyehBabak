@@ -1,0 +1,15 @@
+
+func f1(p : &int) : int {
+     var a: int;
+     a := 5;
+     *p := a;
+}
+
+func main() : int {
+     var a : int;
+     a := 1;
+     var p : &int;
+     p := &a;
+     f1(p);
+     return *p;
+}

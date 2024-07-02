@@ -1,0 +1,22 @@
+func f1(param : int) : int {
+     param := param + 1;     
+     if (1) {
+        param := param * 2;
+     }
+     param := param / 3;
+     return param;
+}
+
+
+func f2(param : int) : int {
+     param := param + 1;     
+     while (param <= 100) {
+        param := param * 2;
+     }
+     param := param / 3;
+     return param;
+}
+
+func main() : int {
+     return f1(0) + f2(0);
+}

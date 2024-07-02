@@ -1,9 +1,9 @@
-name: Excercise 10
+name: Excercise 11
 
 on:
   push:
     paths:
-      - "ex10/**/*.py"
+      - "ex11/**/*.py"
   workflow_dispatch:
 
 jobs:
@@ -12,8 +12,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Setup GCC multilib
-        run: sudo apt install -y gcc-multilib
       - name: Task 1 tests
         run: python3 -m unittest -v
-        working-directory: ex10
+        working-directory: ex11

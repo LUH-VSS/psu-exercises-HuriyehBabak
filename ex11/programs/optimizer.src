@@ -1,0 +1,35 @@
+func foo(cond : int) : int {
+     var a : int;
+     var b : int;
+     var c : int;
+     var x : int;
+     a := 2;
+     b := 3;
+
+     if (cond) {
+        c := a;
+        x := b;
+     } else {
+        b := 4;
+        x := b;
+     }
+     b := a + x;
+     a := a - x;
+
+     return a;
+}
+
+func main() : int {
+     var a : int;
+     a := 1 + 1;
+     if (1) {
+        a := a + 3;
+        if (a >= 1) {
+           a := 0;
+        } else {
+           a := -1;
+        }
+     }
+     return a + foo(0); 
+}
+

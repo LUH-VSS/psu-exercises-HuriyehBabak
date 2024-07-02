@@ -1,0 +1,67 @@
+{
+  "configurations": [
+    {
+      "name": "All tests",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "unittest",
+      "args": ["-v"]
+    },
+    {
+      "name": "test_dead_var_f1",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "unittest",
+      "args": ["-v", "test.test_optimizer.TestOptimizer.test_dead_var_f1"]
+    },
+    {
+      "name": "test_fibonacci",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "unittest",
+      "args": ["-v", "test.test_optimizer.TestOptimizer.test_fibonacci"]
+    },
+    {
+      "name": "test_fibonacci_compile",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "unittest",
+      "args": ["-v", "test.test_optimizer.TestOptimizer.test_fibonacci_compile"]
+    },
+    {
+      "name": "test_opt_dead_var",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "unittest",
+      "args": ["-v", "test.test_optimizer.TestOptimizer.test_opt_dead_var"]
+    },
+    {
+      "name": "test_opt_dead_var_2",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "unittest",
+      "args": ["-v", "test.test_optimizer.TestOptimizer.test_opt_dead_var_2"]
+    },
+    {
+      "name": "test_opt_merge",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "unittest",
+      "args": ["-v", "test.test_optimizer.TestOptimizer.test_opt_merge"]
+    },
+    {
+      "name": "test_opt_merge_f1",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "unittest",
+      "args": ["-v", "test.test_optimizer.TestOptimizer.test_opt_merge_f1"]
+    },
+    {
+      "name": "test_opt_merge_f2",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "unittest",
+      "args": ["-v", "test.test_optimizer.TestOptimizer.test_opt_merge_f2"]
+    }
+  ]
+}
