@@ -203,9 +203,32 @@ class MergeBlocks:
         changed = False
         CFG = function.CFG()
 
-        # TODO: Merge den aktuellen Block und seine Nachfolger,
-        #       wenn this nur einen Nachfolger hat und dieser Nachfolger
-        #       nur this als Vorgänger hat.
+        for block in function.basic_blocks:
+            successors = CFG.successors[block]
+    
+            # Check if the block has exactly one successor
+            if len(successors) != 1:
+                continue
+    
+            successor = successors[0]
+            predecessors = CFG.predecessors[successor]
+    
+            # Check if the successor has exactly one predecessor
+            if len(predecessors) != 1:
+                continue
+    
+            # Merge instructions
+            block.instructions = block.instructions[:-1] + successor.instructions
+    
+            # Update CFG
+            CFG.successors[block] = CFG.successors[successor]
+    
+            # Invalidate the successor block
+            CFG.predecessors[successor] = []
+            CFG.successors[successor] = []
+            successor.instructions = []
+    
+            changed = True
 
         return changed
 
@@ -263,14 +286,36 @@ class DeadBlockElimination:
 
 
 class DeadVariableElimination:
-    def optimize_function(self, function: Function) -> bool:
-        changed = False
+    def optimize_function(self, function: 'Function') -> bool:
+        # Initialisiere die Menge der nie gelesenen Variablen
         never_read = set(function.variables)
+    
+        # Analyse: Identifiziere Variablen, die in irgendeiner Instruktion gelesen werden
+        for block in function.basic_blocks:
+            for instruction in block.instructions:
+                # Entferne Variablen aus never_read, wenn sie als Operanden gelesen werden
+                never_read -= set(instruction.operands_src())
+                # Spezielle Behandlung für Call-Instruktionen: entferne das Ziel der Call-Operation
+                if isinstance(instruction, Call) and instruction.dst in never_read:
+                    never_read.remove(instruction.dst)
+    
+        # Wenn alle Variablen gelesen werden, gibt es nichts zu optimieren
+        if len(never_read) == 0:
+            return False
+    
+        
+        for block in function.basic_blocks:
+            # Filtere die Instruktionen, indem wir eine neue Liste erstellen.
+            filtered_instructions = []
+            for instruction in block.instructions:
+                # Überprüfe, ob die Instruktion eine Zielvariable ('dst') hat, die nicht gelesen wird.
+                if not (hasattr(instruction, 'dst') and instruction.dst in never_read):
+                    filtered_instructions.append(instruction)
+            # Aktualisiere die Instruktionen des Blocks mit der gefilterten Liste.
+            block.instructions = filtered_instructions
 
-        # TODO: Analyse: Finde alle Variablen, die in einer Instruktion gelesen werden.
-        #                (Tipp: Instruction.operands_src())
-        # TODO: Transformation: Alle Variablen, die nie gelesen werden, können gelöscht werden.
-        #       - Lösche Instruktionen, die diese Variablen schreiben (Tipp: Instruction.operand_dst())
-        #       - Lösche die Variablen aus der Funktion
-
-        return changed
+    
+        # Entferne nie gelesene Variablen aus der Variablenliste der Funktion
+        function.variables = [var for var in function.variables if var not in never_read]
+    
+        return True
