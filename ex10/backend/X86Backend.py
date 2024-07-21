@@ -322,7 +322,7 @@ class RegisterCallingConvention(StackCallingConvention):
             return super().call_prologue(instr)
 
         # Lade die Argumente in die Register
-        for index, arg in enumerate(instruction.args):
+        for index, arg in enumerate(instr.arguments):
             # Lade das Argument in ein temporäres Register
             temp_reg = self.RA.load(arg)
             # Weise das Zielregister im Backend zu
