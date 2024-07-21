@@ -1,0 +1,14 @@
+Feedback
+
+b: 4.5/4.5
+c: 7.5/7.5
+
+Achieved Points: 12.0/12
+
+Notes:
+- sehr gut!
+
+
+PINs: 1690,6726,1720
+
+clone time: 2024-07-20 09:35:13.217092
